@@ -1,32 +1,57 @@
 import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Note from "./Note";
+import CreateArea from "./CreateArea";
+import notes from "./notes";
+
+function renderNotes() {
+  return notes.map((noteItem, index) => {
+    return (
+      <Note
+        key={index}
+        id={index}
+        title={noteItem.title}
+        content={noteItem.content}
+      />
+    );
+  });
+}
 
 function App() {
-  const [headingText, setHeadingText] = useState("Hello");
-  const [isMouseOver, setMouseOver] = useState(false);
+  const [notes, setNotes] = useState([]);
 
-  function handleClick() {
-    setHeadingText("Submitted!");
+  function addNote(newNote) {
+    setNotes((prevNotes) => {
+      return [...prevNotes, newNote];
+    });
   }
 
-  function handleMouseOver() {
-    setMouseOver(true);
+  function deleteNote(id) {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
   }
 
-  function handleMouseOut() {
-    setMouseOver(false);
-  }
   return (
-    <div className="container">
-      <h1>{headingText}</h1>
-      <input type="text" placeholder="What's your name?" />
-      <button
-        style={{ backgroundColor: isMouseOver ? "black" : "white" }}
-        onClick={handleClick}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-      >
-        Submit
-      </button>
+    <div>
+      <Header />
+      <CreateArea onAdd={addNote} />
+      {notes.map((noteItem, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={noteItem.title}
+            content={noteItem.content}
+            onDelete={deleteNote}
+          />
+        );
+      })}
+      {renderNotes()}
+      <Footer />
     </div>
   );
 }

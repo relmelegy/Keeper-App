@@ -1,25 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
-import notes from "./notes";
-
-function renderNotes() {
-  return notes.map((noteItem, index) => {
-    return (
-      <Note
-        key={index}
-        id={index}
-        title={noteItem.title}
-        content={noteItem.content}
-      />
-    );
-  });
-}
+import initialnotes from "./notes";
 
 function App() {
   const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    setNotes(initialnotes);
+  }, []);
 
   function addNote(newNote) {
     setNotes((prevNotes) => {
@@ -46,11 +37,10 @@ function App() {
             id={index}
             title={noteItem.title}
             content={noteItem.content}
-            onDelete={deleteNote}
+            onDelete={() => deleteNote(index)}
           />
         );
       })}
-      {renderNotes()}
       <Footer />
     </div>
   );
